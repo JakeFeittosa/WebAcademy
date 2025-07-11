@@ -12,7 +12,7 @@
 <body>
     <header>
         <div id="topo">
-            <img src="/sgcm/imagens/logo_azul(64).png" alt="Logo SGCMs">
+            <img src="imagens/logo_azul(64).png" alt=""> 
             <p>SGCM - Sistema de Gerenciamento de Consultas Médicas</p>
         </div>
     </header>
@@ -41,13 +41,13 @@
     </nav>
     <main>
 
-    <button id="adicionarProf"> Adicionar novo Profissional </button>
+        <button id="adicionarProf"> Adicionar novo Profissional </button>
 
         <form id="formProfissional" style="display: none;">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome"><br>
 
-            <label for="registroConselho">Registro Conselho:</label> 
+            <label for="registroConselho">Registro Conselho:</label>
             <input type="text" id="registroConselho" name="registroConselho"> <br>
 
             <label for="telefone">Telefone:</label>
@@ -78,6 +78,10 @@
             <button type="button" id="btnCancelar">Cancelar</button>
 
         </form>
+
+        <div id="mensagemConfirmacao" style="display: none; color: green; margin: 10px 0;">
+            Profissional cadastrado com sucesso!
+        </div>
 
         <table>
             <!-- tr*6>td{X}*8 

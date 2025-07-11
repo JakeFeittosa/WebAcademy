@@ -60,6 +60,18 @@ btn_enviar.addEventListener('click', (event) => {
         especialidade: form.especialidade.options[form.especialidade.selectedIndex].label
     }
     inserirProfissional(objeto);
+
+    let mensagem = document.getElementById('mensagemConfirmacao');
+    mensagem.style.display = 'block';
+
+    setTimeout(() => {
+        mensagem.style.display = 'none';
+    }, 3000);
+
+    form.style.display = 'none';
+    adicionarProf.style.display = 'inline';
+
+
 });
 
 const inserirProfissional = (item) => {
@@ -105,17 +117,22 @@ function excluirLinha() {
 let adicionarProf = document.getElementById('adicionarProf');
 let btnCancelar = document.getElementById('btnCancelar');
 
-// Mostrar o formulário ao clicar em "Adicionar"
+
 adicionarProf.addEventListener('click', () => {
-    form.reset(); // limpa o formulário
-    form.style.display = 'block'; // mostra o formulário
-    adicionarProf.style.display = 'none'; // esconde o botão
+    form.reset(); 
+    form.style.display = 'block'; 
+    adicionarProf.style.display = 'none'; 
 });
 
 // Cancelar volta ao estado original
 btnCancelar.addEventListener('click', () => {
-    form.style.display = 'none'; // esconde o formulário
-    adicionarProf.style.display = 'inline'; // mostra o botão
+    form.style.display = 'none'; 
+    adicionarProf.style.display = 'inline'; 
 });
+
+
+
+
+
 
 
