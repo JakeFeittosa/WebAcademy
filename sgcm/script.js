@@ -8,7 +8,36 @@ function carregarProfissionais() {
             let dados = JSON.parse(xhr.responseText);
 
             for (let item of dados) {
+                
                 inserirProfissional(item);
+                // let linha = document.createElement('tr');
+                // let id = document.createElement('td');
+                // let nome = document.createElement('td');
+                // let registro = document.createElement('td');
+                // let telefone = document.createElement('td');
+                // let email = document.createElement('td');
+                // let unidade = document.createElement('td');
+                // let especialidade = document.createElement('td');
+                // let opcoes = document.createElement('td');
+
+                // id.textContent = item.id;
+                // nome.textContent = item.nome;
+                // registro.textContent = item.registro;
+                // telefone.textContent = item.telefone;
+                // email.textContent = item.email;
+                // unidade.textContent = item.unidade;
+                // especialidade.textContent = item.especialidade;
+                // opcoes.innerHTML = `<a class="botao_verde" href="">Editar</a>|<a class="botao_vermelho" href="javascript:void(0)">Excluir</a>`;
+
+                // linha.appendChild(id);
+                // linha.appendChild(nome);
+                // linha.appendChild(registro);
+                // linha.appendChild(telefone);
+                // linha.appendChild(email);
+                // linha.appendChild(unidade);
+                // linha.appendChild(especialidade);
+                // linha.appendChild(opcoes);
+                // tabela.appendChild(linha);
                 if (item.id > ultimoId) {
                     ultimoId = item.id;
                 }
@@ -73,7 +102,6 @@ const inserirProfissional = (item) => {
     unidade.textContent = item.unidade;
     especialidade.textContent = item.especialidade;
 
-    // Criar botões de ação
     const btnEditar = document.createElement('a');
     btnEditar.href = "#";
     btnEditar.className = "botao_verde";
@@ -116,7 +144,6 @@ const inserirProfissional = (item) => {
             celulas[3].innerHTML = `<input type="text" value="${celulas[3].textContent}">`;
             celulas[4].innerHTML = `<input type="text" value="${celulas[4].textContent}">`;
 
-           // Cria select para unidade
 celulas[5].innerHTML = `
     <select>
         <option ${celulas[5].textContent === 'Pronto Atendimento' ? 'selected' : ''}>Pronto Atendimento</option>
@@ -125,7 +152,6 @@ celulas[5].innerHTML = `
     </select>
 `;
 
-// Cria select para especialidade
 celulas[6].innerHTML = `
     <select>
         <option ${celulas[6].textContent === 'Cardiologia' ? 'selected' : ''}>Cardiologia</option>
@@ -138,7 +164,6 @@ celulas[6].innerHTML = `
 
             btnEditar.textContent = "Confirmar edição";
         } else {
-            // Confirma edição
             let celulas = linha.querySelectorAll('td');
             celulas[1].textContent = celulas[1].querySelector('input').value;
             celulas[2].textContent = celulas[2].querySelector('input').value;
