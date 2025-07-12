@@ -1,9 +1,6 @@
-let ultimoId = 0; // Controla o maior ID já usado
+let ultimoId = 0;
 
 function carregarProfissionais() {
-
-    
-
     let xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://my-json-server.typicode.com/juniorlimeiras/json/profissionais');
     xhr.addEventListener('readystatechange', () => {
@@ -11,18 +8,15 @@ function carregarProfissionais() {
             let dados = JSON.parse(xhr.responseText);
 
             for (let item of dados) {
-    inserirProfissional(item);
-    if (item.id > ultimoId) {
-        ultimoId = item.id; // Atualiza o maior ID carregado
-    }
-}
-
+                inserirProfissional(item);
+                if (item.id > ultimoId) {
+                    ultimoId = item.id;
+                }
+            }
         }
-        
-        excluirLinha();
-    });//Fecha o escutador de evento
+        atualizarRodape();
+    });
     xhr.send();
-    
 }
 
 carregarProfissionais();
@@ -30,10 +24,12 @@ carregarProfissionais();
 let tabela = document.querySelector('table tbody');
 let form = document.getElementById('formProfissional');
 let btn_enviar = document.querySelector('input[type="submit"]');
+let adicionarProf = document.getElementById('adicionarProf');
+let btnCancelar = document.getElementById('btnCancelar');
 
 btn_enviar.addEventListener('click', (event) => {
-    event.preventDefault(); //Evita que a página seja recarregada
-    //let objeto = new Object();
+    event.preventDefault();
+
     let objeto = {
         id: ++ultimoId,
         nome: form.nome.value,
@@ -43,6 +39,7 @@ btn_enviar.addEventListener('click', (event) => {
         unidade: form.unidade.options[form.unidade.selectedIndex].label,
         especialidade: form.especialidade.options[form.especialidade.selectedIndex].label
     }
+
     inserirProfissional(objeto);
 
     let mensagem = document.getElementById('mensagemConfirmacao');
@@ -54,8 +51,7 @@ btn_enviar.addEventListener('click', (event) => {
 
     form.style.display = 'none';
     adicionarProf.style.display = 'inline';
-
-
+    atualizarRodape();
 });
 
 const inserirProfissional = (item) => {
@@ -76,7 +72,21 @@ const inserirProfissional = (item) => {
     email.textContent = item.email;
     unidade.textContent = item.unidade;
     especialidade.textContent = item.especialidade;
-    opcoes.innerHTML = `<a class="botao_verde" href="">Editar</a>|<a class="botao_vermelho" href="javascript:void(0)">Excluir</a>`;
+
+    // Criar botões de ação
+    const btnEditar = document.createElement('a');
+    btnEditar.href = "#";
+    btnEditar.className = "botao_verde";
+    btnEditar.textContent = "Editar";
+
+    const btnExcluir = document.createElement('a');
+    btnExcluir.href = "javascript:void(0)";
+    btnExcluir.className = "botao_vermelho";
+    btnExcluir.textContent = "Excluir";
+
+    opcoes.appendChild(btnEditar);
+    opcoes.appendChild(document.createTextNode(" | "));
+    opcoes.appendChild(btnExcluir);
 
     linha.appendChild(id);
     linha.appendChild(nome);
@@ -86,37 +96,79 @@ const inserirProfissional = (item) => {
     linha.appendChild(unidade);
     linha.appendChild(especialidade);
     linha.appendChild(opcoes);
+
     tabela.appendChild(linha);
-}
 
-function excluirLinha() {
-    let botoes_excluir = document.querySelectorAll('a.botao_vermelho');
-    for (let botao of botoes_excluir) {
-        botao.addEventListener('click', () => {
-            botao.parentElement.parentElement.remove();
-        });
-    }
-}
+    // Evento excluir (funciona para qualquer linha agora)
+    btnExcluir.addEventListener('click', () => {
+        linha.remove();
+        atualizarRodape();
+    });
 
-let adicionarProf = document.getElementById('adicionarProf');
-let btnCancelar = document.getElementById('btnCancelar');
+    // Evento editar
+    btnEditar.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (btnEditar.textContent === "Editar") {
+            // Armazena os valores atuais
+            let celulas = linha.querySelectorAll('td');
+            celulas[1].innerHTML = `<input type="text" value="${celulas[1].textContent}">`;
+            celulas[2].innerHTML = `<input type="text" value="${celulas[2].textContent}">`;
+            celulas[3].innerHTML = `<input type="text" value="${celulas[3].textContent}">`;
+            celulas[4].innerHTML = `<input type="text" value="${celulas[4].textContent}">`;
 
+           // Cria select para unidade
+celulas[5].innerHTML = `
+    <select>
+        <option ${celulas[5].textContent === 'Pronto Atendimento' ? 'selected' : ''}>Pronto Atendimento</option>
+        <option ${celulas[5].textContent === 'UTI' ? 'selected' : ''}>UTI</option>
+        <option ${celulas[5].textContent === 'Exames Laboratoriais' ? 'selected' : ''}>Exames Laboratoriais</option>
+    </select>
+`;
+
+// Cria select para especialidade
+celulas[6].innerHTML = `
+    <select>
+        <option ${celulas[6].textContent === 'Cardiologia' ? 'selected' : ''}>Cardiologia</option>
+        <option ${celulas[6].textContent === 'Infectologia' ? 'selected' : ''}>Infectologia</option>
+        <option ${celulas[6].textContent === 'Dermatologia' ? 'selected' : ''}>Dermatologia</option>
+        <option ${celulas[6].textContent === 'Pediatria' ? 'selected' : ''}>Pediatria</option>
+    </select>
+`;
+
+
+            btnEditar.textContent = "Confirmar edição";
+        } else {
+            // Confirma edição
+            let celulas = linha.querySelectorAll('td');
+            celulas[1].textContent = celulas[1].querySelector('input').value;
+            celulas[2].textContent = celulas[2].querySelector('input').value;
+            celulas[3].textContent = celulas[3].querySelector('input').value;
+            celulas[4].textContent = celulas[4].querySelector('input').value;
+            celulas[5].textContent = celulas[5].querySelector('select').value;
+            celulas[6].textContent = celulas[6].querySelector('select').value;
+
+            btnEditar.textContent = "Editar";
+        }
+    });
+
+    atualizarRodape();
+};
 
 adicionarProf.addEventListener('click', () => {
-    form.reset(); 
-    form.style.display = 'block'; 
-    adicionarProf.style.display = 'none'; 
+    form.reset();
+    form.style.display = 'block';
+    adicionarProf.style.display = 'none';
 });
 
-// Cancelar volta ao estado original
 btnCancelar.addEventListener('click', () => {
-    form.style.display = 'none'; 
-    adicionarProf.style.display = 'inline'; 
+    form.style.display = 'none';
+    adicionarProf.style.display = 'inline';
 });
 
-
-
-
-
-
-
+function atualizarRodape() {
+    let total = document.querySelectorAll('table tbody tr').length;
+    let rodape = document.getElementById('totalProfissionais');
+    if (rodape) {
+        rodape.textContent = `Total de profissionais: ${total}`;
+    }
+}
